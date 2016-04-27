@@ -29,6 +29,8 @@ static unsigned int firstUpdateRate;
 static int qualHistLowerVal;
 static int qualHistUpperVal;
 
+static unsigned int icgcMinimum;
+
 void printStatsJansson(AbstractStatCollector* rootStatCollector);
 
 int main(int argc, char* argv[]) {
@@ -38,6 +40,7 @@ int main(int argc, char* argv[]) {
 	firstUpdateRate = 0;
 	qualHistLowerVal = 1;
 	qualHistUpperVal = 200;
+	icgcMinimum = 20;
 	bool logScaleAF = false;
 
 	int option_index = 0;
@@ -110,7 +113,7 @@ int main(int argc, char* argv[]) {
 		bsc->processVariant(var);
 		totalVariants++;
 
-		if((totalVariants > 0 && totalVariants % updateRate == 0) ||
+		if((totalVariants > icgcMinimum && totalVariants % updateRate == 0) ||
 				(firstUpdateRate > 0 && totalVariants >= firstUpdateRate)) {
 
 			printStatsJansson(bsc);
@@ -120,7 +123,12 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-	printStatsJansson(bsc);
+	if (totalVariants > icgcMinimum) {
+		printStatsJansson(bsc);
+	} else {
+		BasicStatsCollector *dummy = new BasicStatsCollector(qualHistLowerVal, qualHistUpperVal, logScaleAF);
+		printStatsJansson(dummy);
+	}
 
 	delete bsc;
 
