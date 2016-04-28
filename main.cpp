@@ -110,6 +110,10 @@ int main(int argc, char* argv[]) {
 	while(vcfFile.is_open() && !vcfFile.done()) {
 
 		vcfFile.getNextVariant(var);
+		if (vcfFile.line.empty()) {
+			break;
+		}
+
 		bsc->processVariant(var);
 		totalVariants++;
 
