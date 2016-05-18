@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
 	firstUpdateRate = 0;
 	qualHistLowerVal = 1;
 	qualHistUpperVal = 200;
-	icgcMinimum = 20;
+	icgcMinimum = 30;
 	bool logScaleAF = false;
 
 	int option_index = 0;
